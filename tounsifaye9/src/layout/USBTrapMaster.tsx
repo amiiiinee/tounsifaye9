@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
 import './USBTrapMaster.css';
-
+import { useState } from 'react';
 // 📸 UNCOMMENT THESE LINES TO USE YOUR IMAGES
 // Put your images in: src/assets/
 // import hackerImg from '../assets/hacker.png';
