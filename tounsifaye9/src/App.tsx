@@ -43,6 +43,8 @@ function App() {
         />
       ) : currentView === 'fake-call' ? (
         <PhishGuardEmbed onBack={() => setCurrentView('games')} />
+      ) : currentView === 'phishing-course' ? (
+        <Sbou3iEmbed onBack={() => setCurrentView('courses')} />
       ) : null}
     </div>
   );
@@ -220,7 +222,28 @@ function PhishGuardEmbed({ onBack }) {
         <iframe
           className="phishguard-frame"
           title="PhishGuard"
-          src="/phishguard/index.html"
+          src="/phishguard/level_1/level_1.html"
+        />
+      </div>
+    </div>
+  );
+}
+
+// Sbou3i Course Embed
+function Sbou3iEmbed({ onBack }) {
+  return (
+    <div className="section-container phishguard-embed">
+      <div className="section-header">
+        <button className="back-btn" onClick={onBack}>
+          → رجوع
+        </button>
+        <h2>Phishing Attacks - قصة سبوعي</h2>
+      </div>
+      <div className="phishguard-frame-wrap">
+        <iframe
+          className="phishguard-frame"
+          title="Sbou3i Phishing Story"
+          src="/sbou3i/index.html"
         />
       </div>
     </div>
@@ -261,7 +284,11 @@ function CoursesSection({ setCurrentView }) {
   ];
 
   const handleStartCourse = (courseId) => {
-    alert('الدروس قريباً! 📚 نحضرو محتوى تعليمي متكامل.');
+    if (courseId === 2) {
+      setCurrentView('phishing-course');
+    } else {
+      alert('الدروس قريباً! 📚 نحضرو محتوى تعليمي متكامل.');
+    }
   };
 
   return (

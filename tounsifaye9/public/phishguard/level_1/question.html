@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Question</title>
+    <title>سؤال</title>
     <link rel="icon" href="assets/favicon.png" />
     <link rel="stylesheet" href="css/question.css" />
     <link rel="stylesheet" href="css/game.css" />
@@ -13,32 +13,32 @@
       <div id="game" class="justify-center flex-column">
         <div id="hud">
           <div class="hud-item">
-            <p id="progressText" class="hud-prefix">Question</p>
+            <p id="progressText" class="hud-prefix">سؤال</p>
             <div id="progressBar">
               <div id="progressBarFull"></div>
             </div>
           </div>
           <div class="hud-item">
-            <p class="hud-prefix">Score</p>
+            <p class="hud-prefix">النقاط</p>
             <h1 class="hud-main-text" id="score">0</h1>
           </div>
         </div>
-        <h1 id="question">What is the answer to this question</h1>
+        <h1 id="question">شنو الإجابة الصحيحة؟</h1>
         <div class="choice-container">
           <p class="choice-prefix">A</p>
-          <p class="choice-text" data-number="1">Choice 1</p>
+          <p class="choice-text" data-number="1">اختيار 1</p>
         </div>
         <div class="choice-container">
           <p class="choice-prefix">B</p>
-          <p class="choice-text" data-number="2">Choice 2</p>
+          <p class="choice-text" data-number="2">اختيار 2</p>
         </div>
         <div class="choice-container">
           <p class="choice-prefix">C</p>
-          <p class="choice-text" data-number="3">Choice 2</p>
+          <p class="choice-text" data-number="3">اختيار 3</p>
         </div>
         <div class="choice-container">
           <p class="choice-prefix">D</p>
-          <p class="choice-text" data-number="4">Choice 2</p>
+          <p class="choice-text" data-number="4">اختيار 4</p>
         </div>
       </div>
     </div>
@@ -57,21 +57,21 @@
 
       let questions = [
         {
-          question: "What is a phishing link ?.",
-          choice1: "Phishing link is to provide us free gift and voucher",
-          choice2: "Phishing link is something beneficial to us",
-          choice3: "Phishing link is a scam link to trap us",
-          choice4: "Phishing link is a good link",
+          question: "شنو هو رابط التصيد؟",
+          choice1: "رابط التصيد يعطينا هدايا وڤوبونات مجانية",
+          choice2: "رابط التصيد حاجة تنفعنا",
+          choice3: "رابط التصيد هو رابط احتيال باش يطيّحنا",
+          choice4: "رابط التصيد رابط باهي",
           answer: 3,
         },
         {
           question:
-            "Choose the correct option based on the amazon voucher 🎁💰",
-          choice1: "It'\s genuine, and I'm eager to claim the vouvher.",
-          choice2: "No, It'\s not secure. It seems to be a phishing link.",
+            "اختار الجواب الصحيح بخصوص ڤوبون أمازون 🎁💰",
+          choice1: "صحيح، وانا مستعد ناخذ الڤوبون.",
+          choice2: "لا، موش آمن. يبان رابط تصيد.",
           choice3:
-            "I trust this voucher completely. I will shared it with all my friends.",
-          choice4: "The link is from a trusted source.",
+            "نصدق الڤوبون ونشاركوا مع صحابي الكل.",
+          choice4: "الرابط من مصدر موثوق.",
           answer: 2,
         },
       ];
@@ -97,7 +97,7 @@
         }
 
         questionCounter++;
-        progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`;
+        progressText.innerText = `سؤال ${questionCounter} من ${MAX_QUESTIONS}`;
         progressBarFull.style.width = `${
           (questionCounter / MAX_QUESTIONS) * 100
         }%`;

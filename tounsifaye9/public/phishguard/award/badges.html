@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Awards</title>
+    <title>الجوائز</title>
     <link rel="icon" href="../images/favicon.png">
     <link rel="stylesheet" href="badges.css">
 </head>
@@ -12,18 +12,18 @@
 <body>
     <div class="container">
         <div id="highScores" class="flex-center flex-column">
-            <h1 id="finalScore">Leaderboard</h1>
+            <h1 id="finalScore">جدول الترتيب</h1>
             <img class="leaderboard" src="../images/award.png">
             <div>
                 <h1 id="currentLevel"></h1>
             </div>
-            <p class="awardsText">Awards :</p>
+            <p class="awardsText">الجوائز :</p>
             <div id="awards">
                 <div id="awardsImages"></div>
             </div>
             <li class="link techsupport">
                 <a href="https://fuhadkalathingal.github.io/PhishGuard/">
-                    <h4 class="banner"><span>HOME</span></h4>
+                    <h4 class="banner"><span>الرئيسية</span></h4>
                 </a>
             </li>
         </div>
@@ -49,19 +49,19 @@
                 for (let i = 0; i < level; i++) {
                     const image = document.createElement('img');
                     image.src = levelBadges[i];
-                    image.alt = `Badge Level ${i + 1}`;
+                    image.alt = `وسام المستوى ${i + 1}`;
                     awardsImagesContainer.appendChild(image);
                 }
 
                 // Update current level
-                currentLevelElement.textContent = `Current Level: ${level}`;
+                currentLevelElement.textContent = `المستوى الحالي: ${level}`;
             } else {
                 // Handle the case when the current level is not available or invalid
-                currentLevelElement.textContent = 'Current Level: Not Available';
+                currentLevelElement.textContent = 'المستوى الحالي: غير متوفر';
             }
         } else {
             // Handle the case when the current level is not available
-            currentLevelElement.textContent = 'Current Level: Not Available';
+            currentLevelElement.textContent = 'المستوى الحالي: غير متوفر';
         }
 
         function getCookie(name) {
