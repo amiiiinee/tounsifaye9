@@ -1,8 +1,9 @@
 // App.jsx
 import { useState } from 'react';
 import './App.css';
+import PhishingHunterGame from './layout/PhishingHunterGame';
 
-// Icons (using emoji for simplicity, but you can use react-icons)
+// Icons (using emoji for simplicity)
 const GameIcon = () => <span className="icon">🎮</span>;
 const BookIcon = () => <span className="icon">📚</span>;
 const QuizIcon = () => <span className="icon">🧠</span>;
@@ -17,13 +18,29 @@ function App() {
   return (
     <div className="app-container">
       {currentView === 'menu' ? (
-        <MainMenu setCurrentView={setCurrentView} userScore={userScore} userName={userName} />
+        <MainMenu 
+          setCurrentView={setCurrentView} 
+          userScore={userScore} 
+          userName={userName} 
+        />
       ) : currentView === 'games' ? (
-        <GamesSection setCurrentView={setCurrentView} setUserScore={setUserScore} />
+        <GamesSection 
+          setCurrentView={setCurrentView} 
+          setUserScore={setUserScore} 
+        />
       ) : currentView === 'courses' ? (
         <CoursesSection setCurrentView={setCurrentView} />
       ) : currentView === 'quiz' ? (
-        <QuizSection setCurrentView={setCurrentView} setUserScore={setUserScore} userScore={userScore} />
+        <QuizSection 
+          setCurrentView={setCurrentView} 
+          setUserScore={setUserScore} 
+          userScore={userScore} 
+        />
+      ) : currentView === 'phishing-game' ? (
+        <PhishingHunterGame 
+          onBack={() => setCurrentView('games')}
+          onScoreUpdate={(points) => setUserScore(userScore + points)}
+        />
       ) : null}
     </div>
   );
@@ -36,7 +53,7 @@ function MainMenu({ setCurrentView, userScore, userName }) {
       {/* Header */}
       <div className="header">
         <ShieldIcon />
-        <h1 className="app-title">تونسي فايق</h1>
+        <h1 className="app-title">التونسي فايق</h1>
         <p className="app-subtitle">Etounsi Faye9</p>
         <p className="tagline">إحمي روحك من الهاكرز!</p>
       </div>
@@ -113,23 +130,34 @@ function GamesSection({ setCurrentView, setUserScore }) {
       title: 'Phishing Hunter',
       description: 'إكتشف الإيمايلات المزيفة',
       difficulty: 'Facile',
-      points: 10
+      points: 10,
+      available: true
     },
     {
       id: 2,
       title: 'Fake Call Detective',
       description: 'ميتخدعش بالتلفونات الوهمية',
       difficulty: 'Moyen',
-      points: 20
+      points: 20,
+      available: false
     },
     {
       id: 3,
       title: 'USB Trap Master',
       description: 'ميحطش USB غريب في PC',
       difficulty: 'Difficile',
-      points: 30
+      points: 30,
+      available: false
     }
   ];
+
+  const handlePlayGame = (gameId) => {
+    if (gameId === 1) {
+      setCurrentView('phishing-game');
+    } else {
+      alert('هذه اللعبة قريباً! 🎮');
+    }
+  };
 
   return (
     <div className="section-container">
@@ -142,7 +170,7 @@ function GamesSection({ setCurrentView, setUserScore }) {
 
       <div className="games-grid">
         {games.map(game => (
-          <div key={game.id} className="game-card">
+          <div key={game.id} className={`game-card ${!game.available ? 'locked' : ''}`}>
             <div className="game-header">
               <h3>{game.title}</h3>
               <span className={`difficulty ${game.difficulty.toLowerCase()}`}>
@@ -152,8 +180,17 @@ function GamesSection({ setCurrentView, setUserScore }) {
             <p className="game-description">{game.description}</p>
             <div className="game-footer">
               <span className="points">🏆 {game.points} points</span>
-              <button className="play-btn">إلعب</button>
+              <button 
+                className="play-btn"
+                onClick={() => handlePlayGame(game.id)}
+                disabled={!game.available}
+              >
+                {game.available ? 'إلعب' : '🔒 قريباً'}
+              </button>
             </div>
+            {!game.available && (
+              <div className="coming-soon-badge">Coming Soon</div>
+            )}
           </div>
         ))}
       </div>
@@ -172,27 +209,35 @@ function CoursesSection({ setCurrentView }) {
       id: 1,
       title: 'شنوا Social Engineering؟',
       duration: '10 دقائق',
-      level: 'Débutant'
+      level: 'Débutant',
+      completed: false
     },
     {
       id: 2,
       title: 'Phishing Attacks',
       duration: '15 دقيقة',
-      level: 'Débutant'
+      level: 'Débutant',
+      completed: false
     },
     {
       id: 3,
       title: 'Pretexting و Baiting',
       duration: '20 دقيقة',
-      level: 'Intermédiaire'
+      level: 'Intermédiaire',
+      completed: false
     },
     {
       id: 4,
       title: 'كيفاش تحمي روحك؟',
       duration: '25 دقيقة',
-      level: 'Tous niveaux'
+      level: 'Tous niveaux',
+      completed: false
     }
   ];
+
+  const handleStartCourse = (courseId) => {
+    alert('الدروس قريباً! 📚 نحضرو محتوى تعليمي متكامل.');
+  };
 
   return (
     <div className="section-container">
@@ -214,19 +259,30 @@ function CoursesSection({ setCurrentView }) {
                 <span className="level">{course.level}</span>
               </div>
             </div>
-            <button className="start-btn">إبدا</button>
+            <button 
+              className="start-btn"
+              onClick={() => handleStartCourse(course.id)}
+            >
+              إبدا
+            </button>
           </div>
         ))}
+      </div>
+
+      <div className="tip-box">
+        <p>📚 <strong>نصيحة:</strong> إبدا بالدروس قبل ما تلعب الألعاب باش تفهم أكثر!</p>
       </div>
     </div>
   );
 }
 
-// QuizSection Component
+// Quiz Section Component
 function QuizSection({ setCurrentView, setUserScore, userScore }) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [showResult, setShowResult] = useState(false);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
   const questions = [
     {
@@ -234,7 +290,7 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
       options: [
         'Phishing',
         'Vishing',
-        'El Kol خطير',
+        'الكل خطير',
         'Baiting'
       ],
       correct: 2,
@@ -250,14 +306,51 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
       ],
       correct: 1,
       explanation: 'أحسن حاجة تسكر و تتصل بالبنك مباشرة من الرقم الرسمي!'
+    },
+    {
+      question: 'شنوا يعني Phishing؟',
+      options: [
+        'صيد السمك',
+        'محاولة سرقة معلومات شخصية',
+        'برنامج حماية',
+        'نوع من الفيروسات'
+      ],
+      correct: 1,
+      explanation: 'Phishing هو محاولة خداع الناس باش يعطيو معلوماتهم الشخصية (كلمات سر، أرقام بطاقات...)'
+    },
+    {
+      question: 'إيمايل يطلب منك تحديث معلومات البنك في 24 ساعة. شنوا تعمل؟',
+      options: [
+        'نحدث معلوماتي بسرعة',
+        'نتجاهل الإيمايل',
+        'نتصل بالبنك مباشرة و نتحقق',
+        'نبعث معلوماتي للإيمايل'
+      ],
+      correct: 2,
+      explanation: 'البنوك ما يطلبوش معلومات عبر الإيمايل! دايما اتصل بالبنك مباشرة للتحقق.'
+    },
+    {
+      question: 'صديقك بعثلك USB و قالك "فيه صور الرحلة". شنوا تعمل؟',
+      options: [
+        'نحطه مباشرة في الكمبيوتر',
+        'نسأله أولاً و نفحصه بالأنتي فيروس',
+        'نرميه',
+        'نعطيه لحد آخر'
+      ],
+      correct: 1,
+      explanation: 'دايما تأكد من المصدر و فحص ال USB بالأنتي فيروس قبل ما تستعمله!'
     }
   ];
 
   const handleAnswer = (index) => {
     setSelectedAnswer(index);
     setShowResult(true);
+    
     if (index === questions[currentQuestion].correct) {
-      setUserScore(userScore + 10);
+      const newScore = userScore + 10;
+      setUserScore(newScore);
+      setCorrectAnswers(correctAnswers + 1);
+      onScoreUpdate?.(10);
     }
   };
 
@@ -267,9 +360,70 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
       setSelectedAnswer(null);
       setShowResult(false);
     } else {
-      setCurrentView('menu');
+      setQuizCompleted(true);
     }
   };
+
+  const restartQuiz = () => {
+    setCurrentQuestion(0);
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setQuizCompleted(false);
+    setCorrectAnswers(0);
+  };
+
+  if (quizCompleted) {
+    const percentage = Math.round((correctAnswers / questions.length) * 100);
+    return (
+      <div className="section-container">
+        <div className="quiz-completed">
+          <div className="completion-header">
+            <div className="completion-icon">
+              {percentage >= 80 ? '🏆' : percentage >= 60 ? '👍' : '📚'}
+            </div>
+            <h2>
+              {percentage >= 80 ? 'ممتاز! Bravo!' : percentage >= 60 ? 'مليح! Keep going!' : 'لازم تتدرب أكثر!'}
+            </h2>
+          </div>
+
+          <div className="quiz-results">
+            <div className="result-stat">
+              <span className="stat-label">النتيجة:</span>
+              <span className="stat-value">{correctAnswers}/{questions.length}</span>
+            </div>
+            <div className="result-stat">
+              <span className="stat-label">النسبة:</span>
+              <span className="stat-value">{percentage}%</span>
+            </div>
+            <div className="result-stat">
+              <span className="stat-label">النقاط:</span>
+              <span className="stat-value">+{correctAnswers * 10}</span>
+            </div>
+          </div>
+
+          <div className="completion-message">
+            <p>
+              {percentage >= 80 
+                ? 'مستواك عالي في الأمن السيبراني! واصل هكذا! 🌟'
+                : percentage >= 60
+                ? 'مستوى جيد! حاول تحسن أكثر بالتدريب. 💪'
+                : 'لازم تراجع الدروس و تتدرب أكثر. ما تقلقش، راك في البداية! 📖'
+              }
+            </p>
+          </div>
+
+          <div className="completion-actions">
+            <button className="retry-btn" onClick={restartQuiz}>
+              🔄 أعد الكويز
+            </button>
+            <button className="back-btn" onClick={() => setCurrentView('menu')}>
+              → الرجوع للقائمة
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="section-container quiz-section">
@@ -280,8 +434,16 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
         <h2>كويز - Question {currentQuestion + 1}/{questions.length}</h2>
       </div>
 
+      <div className="quiz-progress-bar">
+        <div 
+          className="quiz-progress-fill"
+          style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
+        />
+      </div>
+
       <div className="quiz-container">
         <div className="question-box">
+          <div className="question-number">السؤال {currentQuestion + 1}</div>
           <h3>{questions[currentQuestion].question}</h3>
         </div>
 
@@ -301,7 +463,8 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
               onClick={() => !showResult && handleAnswer(index)}
               disabled={showResult}
             >
-              {option}
+              <span className="option-letter">{['أ', 'ب', 'ج', 'د'][index]}</span>
+              <span className="option-text">{option}</span>
             </button>
           ))}
         </div>
@@ -309,11 +472,11 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
         {showResult && (
           <div className={`result-box ${selectedAnswer === questions[currentQuestion].correct ? 'success' : 'error'}`}>
             <p className="result-title">
-              {selectedAnswer === questions[currentQuestion].correct ? '✅ صحيح! Bravo!' : '❌ غالط! Ta3allem!'}
+              {selectedAnswer === questions[currentQuestion].correct ? '✅ إجابة صحيحة! Bravo!' : '❌ إجابة خاطئة! Ta3allem!'}
             </p>
             <p className="explanation">{questions[currentQuestion].explanation}</p>
             <button className="next-btn" onClick={nextQuestion}>
-              {currentQuestion < questions.length - 1 ? 'Question Jeya →' : 'Kammel →'}
+              {currentQuestion < questions.length - 1 ? 'السؤال الجاي →' : 'شوف النتيجة 🏆'}
             </button>
           </div>
         )}

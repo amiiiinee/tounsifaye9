@@ -1,0 +1,590 @@
+/* PhishingHunterGame.css */
+.phishing-game {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== MATRIX BACKGROUND ===== */
+.matrix-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.05;
+}
+
+.matrix-code {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #00ff00;
+  animation: matrix-fall 10s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes matrix-fall {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ===== GAME HEADER ===== */
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.game-header h2 {
+  font-size: 20px;
+  margin: 0;
+  color: white;
+}
+
+.back-btn-small {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.back-btn-small:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.score-display {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+}
+
+/* ===== GAME STATS ===== */
+.game-stats {
+  background: #16213E;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.lives-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.lives-label {
+  font-size: 14px;
+  color: #94A3B8;
+}
+
+.hearts {
+  display: flex;
+  gap: 8px;
+}
+
+.heart {
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+.heart.alive {
+  animation: heartbeat 1s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.progress-bar {
+  margin-top: 12px;
+}
+
+.progress-label {
+  font-size: 12px;
+  color: #94A3B8;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FF6B35, #F7931E);
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+/* ===== EMAIL CONTAINER ===== */
+.email-container {
+  background: #16213E;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.email-header {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sender-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sender-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sender-details {
+  flex: 1;
+}
+
+.sender-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.sender-role {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.email-subject {
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+}
+
+.email-body {
+  padding: 16px;
+  color: #E2E8F0;
+  line-height: 1.8;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.email-body p {
+  margin-bottom: 12px;
+}
+
+.url-display {
+  margin: 16px;
+  padding: 12px;
+  background: rgba(255, 107, 53, 0.1);
+  border: 2px solid rgba(255, 107, 53, 0.3);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.url-icon {
+  font-size: 20px;
+}
+
+.url-text {
+  color: #FFC837;
+  font-family: monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+/* ===== CHOICES ===== */
+.choices-container {
+  background: #16213E;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.question-prompt {
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.prompt-icon {
+  font-size: 28px;
+}
+
+.question-prompt p {
+  font-size: 16px;
+  color: white;
+  margin: 0;
+}
+
+.choices-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.choice-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.choice-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.choice-btn.selected {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.real-btn {
+  border-color: #10B981;
+}
+
+.real-btn:hover, .real-btn.selected {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10B981;
+}
+
+.fake-btn {
+  border-color: #EF4444;
+}
+
+.fake-btn:hover, .fake-btn.selected {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #EF4444;
+}
+
+.choice-icon {
+  font-size: 32px;
+}
+
+.choice-text {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.choice-subtitle {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+/* ===== RESULT PANEL ===== */
+.result-panel {
+  background: #16213E;
+  border-radius: 12px;
+  padding: 20px;
+  border-right: 4px solid;
+  animation: slideIn 0.5s ease;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-panel.correct {
+  border-color: #10B981;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), #16213E);
+}
+
+.result-panel.incorrect {
+  border-color: #EF4444;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), #16213E);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.result-icon {
+  font-size: 32px;
+}
+
+.result-header h3 {
+  font-size: 20px;
+  color: white;
+  margin: 0;
+}
+
+.explanation-box, .tips-box {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.explanation-box h4, .tips-box h4 {
+  font-size: 14px;
+  color: #FFC837;
+  margin-bottom: 8px;
+}
+
+.explanation-box p, .tips-box p {
+  font-size: 14px;
+  color: #E2E8F0;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.next-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+  border: none;
+  color: white;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.next-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+}
+
+/* ===== GAME OVER / VICTORY SCREENS ===== */
+.game-over-screen, .victory-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.game-over-content, .victory-content {
+  background: #16213E;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: popIn 0.5s ease;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hacker-avatar {
+  font-size: 72px;
+  margin-bottom: 16px;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.trophy-animation {
+  font-size: 72px;
+  margin-bottom: 16px;
+  animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.game-over-content h2, .victory-content h2 {
+  font-size: 28px;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.game-over-message, .victory-message {
+  font-size: 16px;
+  color: #94A3B8;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.final-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #94A3B8;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFC837;
+}
+
+.victory-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.badge {
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.game-over-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.retry-btn, .back-btn-game {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, #FF6B35, #F7931E);
+  color: white;
+}
+
+.retry-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+}
+
+.back-btn-game {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.back-btn-game:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 400px) {
+  .choices-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .game-header h2 {
+    font-size: 16px;
+  }
+
+  .choice-icon {
+    font-size: 24px;
+  }
+
+  .choice-text {
+    font-size: 16px;
+  }
+}
