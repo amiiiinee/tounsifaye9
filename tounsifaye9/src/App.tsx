@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import './App.css';
 import PhishingHunterGame from './layout/PhishingHunterGame';
+import USBTrapMaster from './layout/USBTrapMaster';
 
 // Icons (using emoji for simplicity)
 const GameIcon = () => <span className="icon">🎮</span>;
@@ -43,6 +44,11 @@ function App() {
         />
       ) : currentView === 'fake-call' ? (
         <PhishGuardEmbed onBack={() => setCurrentView('games')} />
+      ) : currentView === 'usb-trap' ? (
+        <USBTrapMaster 
+          onBack={() => setCurrentView('games')}
+          onScoreUpdate={(points) => setUserScore(userScore + points)}
+        />
       ) : currentView === 'phishing-course' ? (
         <Sbou3iEmbed onBack={() => setCurrentView('courses')} />
       ) : null}
@@ -57,7 +63,7 @@ function MainMenu({ setCurrentView, userScore, userName }) {
       {/* Header */}
       <div className="header">
         <ShieldIcon />
-        <h1 className="app-title">التونسي فايق</h1>
+        <h1 className="app-title">تونسي فايق</h1>
         <p className="app-subtitle">Etounsi Faye9</p>
         <p className="tagline">إحمي روحك من الهاكرز!</p>
       </div>
@@ -139,7 +145,7 @@ function GamesSection({ setCurrentView, setUserScore }) {
     },
     {
       id: 2,
-      title: 'Fake Call Detective',
+      title: 'spam',
       description: 'ميتخدعش بالتلفونات الوهمية',
       difficulty: 'Moyen',
       points: 20,
@@ -147,11 +153,11 @@ function GamesSection({ setCurrentView, setUserScore }) {
     },
     {
       id: 3,
-      title: 'USB Trap Master',
+      title: 'e8leb el fahem',
       description: 'ميحطش USB غريب في PC',
       difficulty: 'Difficile',
       points: 30,
-      available: false
+      available: true
     }
   ];
 
@@ -160,6 +166,8 @@ function GamesSection({ setCurrentView, setUserScore }) {
       setCurrentView('phishing-game');
     } else if (gameId === 2) {
       setCurrentView('fake-call');
+    } else if (gameId === 3) {
+      setCurrentView('usb-trap');
     } else {
       alert('هذه اللعبة قريباً! 🎮');
     }
@@ -216,7 +224,7 @@ function PhishGuardEmbed({ onBack }) {
         <button className="back-btn" onClick={onBack}>
           → رجوع
         </button>
-        <h2>Fake Call Detective</h2>
+        <h2>spam</h2>
       </div>
       <div className="phishguard-frame-wrap">
         <iframe
@@ -237,7 +245,7 @@ function Sbou3iEmbed({ onBack }) {
         <button className="back-btn" onClick={onBack}>
           → رجوع
         </button>
-        <h2>Phishing Attacks - قصة سبوعي</h2>
+        <h2> قصة سبوعي</h2>
       </div>
       <div className="phishguard-frame-wrap">
         <iframe
@@ -253,32 +261,12 @@ function Sbou3iEmbed({ onBack }) {
 // Courses Section Component
 function CoursesSection({ setCurrentView }) {
   const courses = [
-    {
-      id: 1,
-      title: 'شنوا Social Engineering؟',
-      duration: '10 دقائق',
-      level: 'Débutant',
-      completed: false
-    },
+    
     {
       id: 2,
-      title: 'Phishing Attacks',
+      title: 'sénario- قصة سبوعي',
       duration: '15 دقيقة',
       level: 'Débutant',
-      completed: false
-    },
-    {
-      id: 3,
-      title: 'Pretexting و Baiting',
-      duration: '20 دقيقة',
-      level: 'Intermédiaire',
-      completed: false
-    },
-    {
-      id: 4,
-      title: 'كيفاش تحمي روحك؟',
-      duration: '25 دقيقة',
-      level: 'Tous niveaux',
       completed: false
     }
   ];
@@ -402,7 +390,6 @@ function QuizSection({ setCurrentView, setUserScore, userScore }) {
       const newScore = userScore + 10;
       setUserScore(newScore);
       setCorrectAnswers(correctAnswers + 1);
-      onScoreUpdate?.(10);
     }
   };
 

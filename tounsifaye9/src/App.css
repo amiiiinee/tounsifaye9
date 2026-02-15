@@ -24,6 +24,7 @@ body {
   min-height: 100vh;
   color: var(--text-light);
   direction: rtl;
+  overflow-x: hidden;
 }
 
 .app-container {
@@ -240,6 +241,10 @@ body {
   transform: scale(1.05);
 }
 
+.back-btn:active {
+  transform: scale(0.95);
+}
+
 .section-header h2 {
   font-size: 20px;
   flex: 1;
@@ -258,11 +263,18 @@ body {
   padding: 20px;
   border: 2px solid rgba(255, 107, 53, 0.3);
   transition: all 0.3s ease;
+  position: relative;
 }
 
-.game-card:hover {
+.game-card:hover:not(.locked) {
   border-color: var(--primary-color);
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(255, 107, 53, 0.2);
+}
+
+.game-card.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .game-header {
@@ -326,9 +338,31 @@ body {
   transition: all 0.3s ease;
 }
 
-.play-btn:hover {
+.play-btn:hover:not(:disabled) {
   background: var(--secondary-color);
   transform: scale(1.05);
+}
+
+.play-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.play-btn:disabled {
+  background: var(--text-gray);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.coming-soon-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--accent-color);
+  color: var(--dark-bg);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
 }
 
 /* ===== COURSES LIST ===== */
@@ -390,7 +424,31 @@ body {
   transform: scale(1.05);
 }
 
+.start-btn:active {
+  transform: scale(0.95);
+}
+
 /* ===== QUIZ SECTION ===== */
+.quiz-section {
+  padding-bottom: 40px;
+}
+
+.quiz-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.quiz-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+  transition: width 0.5s ease;
+  border-radius: 10px;
+}
+
 .quiz-container {
   display: flex;
   flex-direction: column;
@@ -402,6 +460,13 @@ body {
   padding: 24px;
   border-radius: var(--border-radius);
   border-right: 4px solid var(--accent-color);
+}
+
+.question-number {
+  color: var(--accent-color);
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
 .question-box h3 {
@@ -425,11 +490,35 @@ body {
   font-size: 16px;
   text-align: right;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .option-btn:hover:not(:disabled) {
   border-color: var(--primary-color);
   transform: translateX(-4px);
+}
+
+.option-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.option-btn:disabled {
+  cursor: not-allowed;
+}
+
+.option-letter {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  min-width: 30px;
+  text-align: center;
+}
+
+.option-text {
+  flex: 1;
 }
 
 .option-btn.selected {
@@ -442,9 +531,19 @@ body {
   background: rgba(16, 185, 129, 0.2);
 }
 
+.option-btn.correct .option-letter {
+  background: var(--success);
+  color: white;
+}
+
 .option-btn.wrong {
   border-color: var(--error);
   background: rgba(239, 68, 68, 0.2);
+}
+
+.option-btn.wrong .option-letter {
+  background: var(--error);
+  color: white;
 }
 
 .result-box {
@@ -493,6 +592,104 @@ body {
   transform: scale(1.02);
 }
 
+.next-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===== QUIZ COMPLETION ===== */
+.quiz-completed {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 20px;
+}
+
+.completion-header {
+  text-align: center;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-radius: var(--border-radius);
+}
+
+.completion-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.completion-header h2 {
+  font-size: 24px;
+  color: white;
+}
+
+.quiz-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.result-stat {
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid rgba(255, 199, 55, 0.2);
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-gray);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.completion-message {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  border-right: 4px solid var(--accent-color);
+}
+
+.completion-message p {
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.completion-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.retry-btn {
+  background: var(--accent-color);
+  border: none;
+  color: var(--dark-bg);
+  padding: 14px 32px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+  background: var(--secondary-color);
+  color: white;
+  transform: scale(1.02);
+}
+
+.retry-btn:active {
+  transform: scale(0.98);
+}
+
+/* ===== TIP BOX ===== */
 .tip-box {
   padding: 16px;
   background: rgba(255, 107, 53, 0.1);
@@ -503,6 +700,21 @@ body {
 .tip-box p {
   font-size: 14px;
   line-height: 1.6;
+}
+
+/* ===== DISABLE TEXT SELECTION FOR GAME ELEMENTS ===== */
+.menu-btn,
+.game-card,
+.option-btn,
+.play-btn,
+.start-btn,
+.back-btn,
+.next-btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -522,4 +734,83 @@ body {
   .btn-text h2 {
     font-size: 18px;
   }
+
+  .quiz-results {
+    grid-template-columns: 1fr;
+  }
+
+  .game-header h3 {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 481px) {
+  .app-container {
+    padding: 30px;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-menu,
+.section-container {
+  animation: fadeIn 0.4s ease;
+}
+
+.game-card,
+.course-card,
+.menu-btn {
+  animation: slideUp 0.4s ease;
+}
+
+.game-card:nth-child(1) { animation-delay: 0.1s; }
+.game-card:nth-child(2) { animation-delay: 0.2s; }
+.game-card:nth-child(3) { animation-delay: 0.3s; }
+
+.menu-btn:nth-child(1) { animation-delay: 0.1s; }
+.menu-btn:nth-child(2) { animation-delay: 0.2s; }
+.menu-btn:nth-child(3) { animation-delay: 0.3s; }
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.05);
 }
