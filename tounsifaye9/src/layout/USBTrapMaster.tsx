@@ -386,7 +386,7 @@ const USBTrapMaster = ({ onBack, onScoreUpdate }: { onBack: () => void; onScoreU
                   <h3 className="result-title">غالط! انتبه!</h3>
                   <p className="result-message">الهاكر ضربك! خلي بالك أكثر! ⚠️</p>
                   <p className="result-explanation">
-                    الإجابة الصحيحة: {currentScenario.cards.find(c => c.isCorrect).text}
+                    الإجابة الصحيحة: {currentScenario.cards.find(c => c.isCorrect)?.text}
                   </p>
                   {playerHealth > 0 && (
                     <button className="next-round-btn" onClick={nextRound}>
