@@ -8,9 +8,9 @@ import './USBTrapMaster.css';
 import winMemeImg from '../assets/win-meme.png';
 import loseMemeImg from '../assets/lose-meme.png';
 
-const USBTrapMaster = ({ onBack, onScoreUpdate }) => {
+const USBTrapMaster = ({ onBack, onScoreUpdate }: { onBack: () => void; onScoreUpdate?: (score: number) => void }) => {
   const [currentRound, setCurrentRound] = useState(0);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [gameWon, setGameWon] = useState(false);
   const [result, setResult] = useState('');
@@ -142,7 +142,7 @@ const USBTrapMaster = ({ onBack, onScoreUpdate }) => {
     }
   ];
 
-  const handleCardClick = (card) => {
+  const handleCardClick = (card: { id: number; isCorrect: boolean }) => {
     setSelectedCard(card.id);
     
     setTimeout(() => {
@@ -372,7 +372,7 @@ const USBTrapMaster = ({ onBack, onScoreUpdate }) => {
                   <h3 className="result-title">صحيح! أحسنت!</h3>
                   <p className="result-message">حميت روحك من هذا الفخ! 🛡️</p>
                   <p className="result-explanation">
-                    {currentScenario.cards.find(c => c.isCorrect).tunisianStyle}
+                    {currentScenario.cards.find(c => c.isCorrect)?.tunisianStyle}
                   </p>
                   {hackerHealth > 0 && (
                     <button className="next-round-btn" onClick={nextRound}>
