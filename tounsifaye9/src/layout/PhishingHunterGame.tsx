@@ -1,20 +1,44 @@
-// PhishingHunterGame.jsx
-import { useState, useEffect } from 'react';
+// PhishingHunterGame.tsx
+import { useState } from 'react';
 import './PhishingHunterGame.css';
 
-const PhishingHunterGame = ({ onBack, onScoreUpdate }) => {
-  const [currentLevel, setCurrentLevel] = useState(0);
-  const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3);
-  const [showResult, setShowResult] = useState(false);
-  const [resultMessage, setResultMessage] = useState('');
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
-  const [gameWon, setGameWon] = useState(false);
-  const [selectedChoice, setSelectedChoice] = useState(null);
+interface Character {
+  name: string;
+  role: string;
+  avatar: string;
+  color: string;
+}
+
+interface Scenario {
+  id: number;
+  from: Character;
+  subject: string;
+  message: string;
+  isPhishing: boolean;
+  realUrl?: string;
+  fakeUrl?: string;
+  explanation: string;
+  tips: string;
+}
+
+interface PhishingHunterGameProps {
+  onBack: () => void;
+  onScoreUpdate?: (points: number) => void;
+}
+
+const PhishingHunterGame = ({ onBack, onScoreUpdate }: PhishingHunterGameProps) => {
+  const [currentLevel, setCurrentLevel] = useState<number>(0);
+  const [score, setScore] = useState<number>(0);
+  const [lives, setLives] = useState<number>(3);
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [resultMessage, setResultMessage] = useState<string>('');
+  const [isCorrect, setIsCorrect] = useState<boolean>(false);
+  const [gameOver, setGameOver] = useState<boolean>(false);
+  const [gameWon, setGameWon] = useState<boolean>(false);
+  const [selectedChoice, setSelectedChoice] = useState<string | null>(null);
 
   // Characters data
-  const characters = {
+  const characters: Record<string, Character> = {
     baji: {
       name: 'الباجي قايد السبسي',
       role: 'الرئيس',
@@ -42,7 +66,7 @@ const PhishingHunterGame = ({ onBack, onScoreUpdate }) => {
   };
 
   // Game scenarios - Mix of real and phishing
-  const scenarios = [
+  const scenarios: Scenario[] = [
     {
       id: 1,
       from: characters.baji,
@@ -77,11 +101,11 @@ const PhishingHunterGame = ({ onBack, onScoreUpdate }) => {
       id: 4,
       from: { ...characters.sboui, name: 'صبوعي - Sitecom' },
       subject: 'رَبحت 50,000 دينار! 🎉💰',
-      message: 'مبروك يا صاحبي!\n\nرَبحت في السحب على 50,000 دينار!!\n\nباش تاخذ الفلوس، ابعث:\n• رقم بطاقة التعريف\n• رقم الحساب البنكي\n• كلمة السر مت��ع البنك\n\nعلى هذا الإيمايل: sitecom.winner@gmail.com\n\nيالله بسرعة قبل ما يفوت الوقت!\n\nصبوعي',
+      message: 'مبروك يا صاحبي!\n\nرَبحت في السحب على 50,000 دينار!!\n\nباش تاخذ الفلوس، ابعث:\n• رقم بطاقة التعريف\n• رقم الحساب البنكي\n• كلمة السر متاع البنك\n\nعلى هذا الإيمايل: sitecom.winner@gmail.com\n\nيالله بسرعة قبل ما يفوت الوقت!\n\nصبوعي',
       isPhishing: true,
       fakeUrl: 'gmail.com',
       explanation: '❌ PHISHING واضح!\n• وعود بفلوس كبيرة\n• طلب معلومات حساسة (كلمة السر!!)\n• إيمايل Gmail بدل دومين الشركة\n• استعجال مشبوه\n• emoji كثيرة',
-      tips: 'ما فماش فلوس مجانية! وما تعطيش JAMAIS كلمة السر مت��ع البنك!'
+      tips: 'ما فماش فلوس مجانية! وما تعطيش JAMAIS كلمة السر متاع البنك!'
     },
     {
       id: 5,
@@ -125,7 +149,7 @@ const PhishingHunterGame = ({ onBack, onScoreUpdate }) => {
     }
   ];
 
-  const handleChoice = (choice) => {
+  const handleChoice = (choice: string) => {
     setSelectedChoice(choice);
     const currentScenario = scenarios[currentLevel];
     const correct = (choice === 'real' && !currentScenario.isPhishing) || 
@@ -370,7 +394,7 @@ const PhishingHunterGame = ({ onBack, onScoreUpdate }) => {
       )}
 
       {/* Matrix Effect Background */}
-      <div className="matrix-bg">
+      <div className="matrix-bg">   
         <div className="matrix-code">010101</div>
       </div>
     </div>

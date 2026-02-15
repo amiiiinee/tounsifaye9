@@ -1,8 +1,25 @@
-// App.jsx
+// App.tsx
 import { useState, useEffect } from 'react';
 import './App.css';
 import PhishingHunterGame from './layout/PhishingHunterGame';
 import USBTrapMaster from './layout/USBTrapMaster';
+
+// Types
+interface ScanResult {
+  isPhishing: boolean;
+  riskLevel: string;
+  riskColor: string;
+  riskScore: number;
+  issues: string[];
+  recommendation: string;
+  timestamp: string;
+}
+
+interface ScanHistoryItem {
+  url: string;
+  result: ScanResult;
+  id: number;
+}
 
 // Icons (using emoji for simplicity)
 const GameIcon = () => <span className="icon">🎮</span>;
@@ -14,16 +31,14 @@ const ScanIcon = () => <span className="icon">🔍</span>;
 const CreditIcon = () => <span className="icon">💳</span>;
 
 function App() {
-  const [currentView, setCurrentView] = useState('menu');
-  const [userScore, setUserScore] = useState(0);
-  const [userName, setUserName] = useState('');
-  const [userCredits, setUserCredits] = useState(50); // Initial credits
+  const [currentView, setCurrentView] = useState<string>('menu');
+  const [userScore, setUserScore] = useState<number>(0);
+  const [userCredits, setUserCredits] = useState<number>(50);
 
   // Load credits from localStorage on mount
   useEffect(() => {
     const savedCredits = localStorage.getItem('userCredits');
     if (savedCredits === null) {
-      // First time user
       localStorage.setItem('userCredits', '50');
       setUserCredits(50);
     } else {
@@ -51,8 +66,7 @@ function App() {
       {currentView === 'menu' ? (
         <MainMenu 
           setCurrentView={setCurrentView} 
-          userScore={userScore} 
-          userName={userName}
+          userScore={userScore}
           userCredits={userCredits}
         />
       ) : currentView === 'games' ? (
@@ -80,7 +94,7 @@ function App() {
       ) : currentView === 'phishing-game' ? (
         <PhishingHunterGame 
           onBack={() => setCurrentView('games')}
-          onScoreUpdate={(points) => {
+          onScoreUpdate={(points: number) => {
             setUserScore(userScore + points);
             setUserCredits(userCredits + points);
           }}
@@ -90,7 +104,7 @@ function App() {
       ) : currentView === 'usb-trap' ? (
         <USBTrapMaster 
           onBack={() => setCurrentView('games')}
-          onScoreUpdate={(points) => {
+          onScoreUpdate={(points: number) => {
             setUserScore(userScore + points);
             setUserCredits(userCredits + points);
           }}
@@ -103,7 +117,13 @@ function App() {
 }
 
 // Main Menu Component
-function MainMenu({ setCurrentView, userScore, userName, userCredits }) {
+interface MainMenuProps {
+  setCurrentView: (view: string) => void;
+  userScore: number;
+  userCredits: number;
+}
+
+function MainMenu({ setCurrentView, userScore, userCredits }: MainMenuProps) {
   return (
     <div className="main-menu">
       {/* Header */}
@@ -199,14 +219,20 @@ function MainMenu({ setCurrentView, userScore, userName, userCredits }) {
   );
 }
 
-// URL Detector Section Component - NEW
-function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
-  const [url, setUrl] = useState('');
-  const [isScanning, setIsScanning] = useState(false);
-  const [result, setResult] = useState(null);
-  const [scanHistory, setScanHistory] = useState([]);
+// URL Detector Section Component
+interface URLDetectorSectionProps {
+  setCurrentView: (view: string) => void;
+  userCredits: number;
+  setUserCredits: (credits: number | ((prev: number) => number)) => void;
+}
 
-  const analyzeURL = async (urlToCheck) => {
+function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }: URLDetectorSectionProps) {
+  const [url, setUrl] = useState<string>('');
+  const [isScanning, setIsScanning] = useState<boolean>(false);
+  const [result, setResult] = useState<ScanResult | null>(null);
+  const [scanHistory, setScanHistory] = useState<ScanHistoryItem[]>([]);
+
+  const analyzeURL = async (urlToCheck: string): Promise<ScanResult> => {
     // Simulate AI analysis with detailed checks
     await new Promise(resolve => setTimeout(resolve, 2000));
 
@@ -224,7 +250,7 @@ function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
     const domainLength = urlToCheck.replace(/https?:\/\//g, '').split('/')[0].length;
     const hasSubdomains = (urlToCheck.match(/\./g) || []).length > 2;
     
-    const detectedIssues = [];
+    const detectedIssues: string[] = [];
     let riskScore = 0;
 
     // Check patterns
@@ -304,21 +330,21 @@ function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
     setResult(null);
 
     // Deduct credits
-    setUserCredits(prev => prev - 50);
+    setUserCredits((prev: number) => prev - 50);
 
     try {
       const analysisResult = await analyzeURL(url);
       setResult(analysisResult);
       
       // Add to history
-      setScanHistory(prev => [{
+      setScanHistory((prev: ScanHistoryItem[]) => [{
         url: url,
         result: analysisResult,
         id: Date.now()
       }, ...prev.slice(0, 4)]);
     } catch (error) {
       alert('حدث خطأ في الفحص. حاول مرة أخرى.');
-      setUserCredits(prev => prev + 50); // Refund credits on error
+      setUserCredits((prev: number) => prev + 50);
     } finally {
       setIsScanning(false);
     }
@@ -409,7 +435,7 @@ function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
             <h3>📋 التحليل التفصيلي:</h3>
             {result.issues.length > 0 ? (
               <ul className="issues-list">
-                {result.issues.map((issue, index) => (
+                {result.issues.map((issue: string, index: number) => (
                   <li key={index}>
                     <span className="issue-icon">⚡</span>
                     {issue}
@@ -438,7 +464,7 @@ function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
         <div className="scan-history">
           <h3>📜 آخر الفحوصات</h3>
           <div className="history-list">
-            {scanHistory.map((item) => (
+            {scanHistory.map((item: ScanHistoryItem) => (
               <div key={item.id} className={`history-item ${item.result.riskColor}`}>
                 <div className="history-info">
                   <span className="history-status">
@@ -471,7 +497,13 @@ function URLDetectorSection({ setCurrentView, userCredits, setUserCredits }) {
 }
 
 // Games Section Component
-function GamesSection({ setCurrentView, setUserScore, setUserCredits }) {
+interface GamesSectionProps {
+  setCurrentView: (view: string) => void;
+  setUserScore: (score: number | ((prev: number) => number)) => void;
+  setUserCredits: (credits: number | ((prev: number) => number)) => void;
+}
+
+function GamesSection({ setCurrentView }: GamesSectionProps) {
   const games = [
     {
       id: 1,
@@ -499,7 +531,7 @@ function GamesSection({ setCurrentView, setUserScore, setUserCredits }) {
     }
   ];
 
-  const handlePlayGame = (gameId) => {
+  const handlePlayGame = (gameId: number) => {
     if (gameId === 1) {
       setCurrentView('phishing-game');
     } else if (gameId === 2) {
@@ -555,7 +587,11 @@ function GamesSection({ setCurrentView, setUserScore, setUserCredits }) {
 }
 
 // PhishGuard Embed
-function PhishGuardEmbed({ onBack }) {
+interface PhishGuardEmbedProps {
+  onBack: () => void;
+}
+
+function PhishGuardEmbed({ onBack }: PhishGuardEmbedProps) {
   return (
     <div className="section-container phishguard-embed">
       <div className="section-header">
@@ -576,7 +612,11 @@ function PhishGuardEmbed({ onBack }) {
 }
 
 // Sbou3i Course Embed
-function Sbou3iEmbed({ onBack }) {
+interface Sbou3iEmbedProps {
+  onBack: () => void;
+}
+
+function Sbou3iEmbed({ onBack }: Sbou3iEmbedProps) {
   return (
     <div className="section-container phishguard-embed">
       <div className="section-header">
@@ -597,9 +637,12 @@ function Sbou3iEmbed({ onBack }) {
 }
 
 // Courses Section Component
-function CoursesSection({ setCurrentView }) {
+interface CoursesSectionProps {
+  setCurrentView: (view: string) => void;
+}
+
+function CoursesSection({ setCurrentView }: CoursesSectionProps) {
   const courses = [
-    
     {
       id: 2,
       title: 'sénario- قصة سبوعي',
@@ -609,7 +652,7 @@ function CoursesSection({ setCurrentView }) {
     }
   ];
 
-  const handleStartCourse = (courseId) => {
+  const handleStartCourse = (courseId: number) => {
     if (courseId === 2) {
       setCurrentView('phishing-course');
     } else {
@@ -655,12 +698,20 @@ function CoursesSection({ setCurrentView }) {
 }
 
 // Quiz Section Component
-function QuizSection({ setCurrentView, setUserScore, userScore, userCredits, setUserCredits }) {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [showResult, setShowResult] = useState(false);
-  const [quizCompleted, setQuizCompleted] = useState(false);
-  const [correctAnswers, setCorrectAnswers] = useState(0);
+interface QuizSectionProps {
+  setCurrentView: (view: string) => void;
+  setUserScore: (score: number | ((prev: number) => number)) => void;
+  userScore: number;
+  userCredits: number;
+  setUserCredits: (credits: number | ((prev: number) => number)) => void;
+}
+
+function QuizSection({ setCurrentView, setUserScore, userScore, userCredits, setUserCredits }: QuizSectionProps) {
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showResult, setShowResult] = useState<boolean>(false);
+  const [quizCompleted, setQuizCompleted] = useState<boolean>(false);
+  const [correctAnswers, setCorrectAnswers] = useState<number>(0);
 
   const questions = [
     {
@@ -720,7 +771,7 @@ function QuizSection({ setCurrentView, setUserScore, userScore, userCredits, set
     }
   ];
 
-  const handleAnswer = (index) => {
+  const handleAnswer = (index: number) => {
     setSelectedAnswer(index);
     setShowResult(true);
     
