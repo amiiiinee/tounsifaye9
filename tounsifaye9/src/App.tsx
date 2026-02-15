@@ -41,6 +41,8 @@ function App() {
           onBack={() => setCurrentView('games')}
           onScoreUpdate={(points) => setUserScore(userScore + points)}
         />
+      ) : currentView === 'fake-call' ? (
+        <PhishGuardEmbed onBack={() => setCurrentView('games')} />
       ) : null}
     </div>
   );
@@ -139,7 +141,7 @@ function GamesSection({ setCurrentView, setUserScore }) {
       description: 'ميتخدعش بالتلفونات الوهمية',
       difficulty: 'Moyen',
       points: 20,
-      available: false
+      available: true
     },
     {
       id: 3,
@@ -154,6 +156,8 @@ function GamesSection({ setCurrentView, setUserScore }) {
   const handlePlayGame = (gameId) => {
     if (gameId === 1) {
       setCurrentView('phishing-game');
+    } else if (gameId === 2) {
+      setCurrentView('fake-call');
     } else {
       alert('هذه اللعبة قريباً! 🎮');
     }
@@ -197,6 +201,27 @@ function GamesSection({ setCurrentView, setUserScore }) {
 
       <div className="tip-box">
         <p>🎯 <strong>Conseil:</strong> إبدا بال level السهل باش تفهم كيفاش الهاكرز يخدمو!</p>
+      </div>
+    </div>
+  );
+}
+
+// PhishGuard Embed
+function PhishGuardEmbed({ onBack }) {
+  return (
+    <div className="section-container phishguard-embed">
+      <div className="section-header">
+        <button className="back-btn" onClick={onBack}>
+          → رجوع
+        </button>
+        <h2>Fake Call Detective</h2>
+      </div>
+      <div className="phishguard-frame-wrap">
+        <iframe
+          className="phishguard-frame"
+          title="PhishGuard"
+          src="/phishguard/index.html"
+        />
       </div>
     </div>
   );
